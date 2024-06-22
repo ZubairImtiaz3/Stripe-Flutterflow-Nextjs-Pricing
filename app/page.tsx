@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  PricingCard,
-  PricingHeader,
-  PricingSwitch,
-} from "@/components/pricing";
+import { PricingCard, PricingSwitch } from "@/components/pricing";
 import React, { useState } from "react";
 
 export default function Home() {
@@ -53,17 +49,30 @@ export default function Home() {
     },
   ];
   return (
-    <div className="py-8">
-      <PricingHeader
-        title="Pricing Plans"
-        subtitle="Choose the plan that's right for you"
-      />
-      <PricingSwitch onSwitch={togglePricingPeriod} />
-      <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-8">
-        {plans.map((plan) => {
-          return <PricingCard key={plan.title} {...plan} isYearly={isYearly} />;
-        })}
-      </section>
-    </div>
+    <>
+      <div className="bg-pricing-hero w-full h-[22.313rem] flex justify-center items-center">
+        <div className="flex flex-col justify-center items-center max-w-[31.5rem] text-center space-y-3">
+          <p className="text-lg font-medium text-primary">Affordable pricing</p>
+          <h3 className="text-[2rem] font-medium text-primary">
+            Choose the best GMIND AI plan
+          </h3>
+          <p className="text-sm text-primary-light">
+            We offer three comprehensive packages to cater to your needs:
+            <br /> Basic, Premium, and Supported/Partners.
+          </p>
+          <PricingSwitch onSwitch={togglePricingPeriod} />
+        </div>
+      </div>
+
+      <div className="py-8">
+        <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-8">
+          {plans.map((plan) => {
+            return (
+              <PricingCard key={plan.title} {...plan} isYearly={isYearly} />
+            );
+          })}
+        </section>
+      </div>
+    </>
   );
 }

@@ -25,11 +25,12 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "rgba(35, 35, 35, 1)",
           foreground: "hsl(var(--primary-foreground))",
+          light: "rgba(51, 50, 55, 0.75)",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: "#E55109",
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
@@ -37,7 +38,7 @@ const config = {
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
+          DEFAULT: "#F6F7F9",
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
@@ -72,6 +73,12 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      backgroundImage: {
+        'pricing-hero': "url('/img/pricing-bg.png')",
+      },
+      boxShadow: {
+        'tabsActive': "0px 5px 7px rgba(238, 117, 0, 0.230196)",
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],

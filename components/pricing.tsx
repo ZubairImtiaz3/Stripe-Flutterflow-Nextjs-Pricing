@@ -30,27 +30,16 @@ type PricingCardProps = {
   exclusive?: boolean;
 };
 
-export const PricingHeader = ({
-  title,
-  subtitle,
-}: {
-  title: string;
-  subtitle: string;
-}) => (
-  <section className="text-center">
-    <h2 className="text-3xl font-bold">{title}</h2>
-    <p className="text-xl pt-1">{subtitle}</p>
-    <br />
-  </section>
-);
-
 export const PricingSwitch = ({ onSwitch }: PricingSwitchProps) => (
-  <Tabs defaultValue="0" className="w-40 mx-auto" onValueChange={onSwitch}>
-    <TabsList className="py-6 px-2">
-      <TabsTrigger value="0" className="text-base">
+  <Tabs defaultValue="0" className="mx-auto pt-6" onValueChange={onSwitch}>
+    <TabsList className="py-7 px-[1.125rem]">
+      <TabsTrigger value="0" className="text-[#EE7500] text-base px-6 py-2">
         Monthly
       </TabsTrigger>
-      <TabsTrigger value="1" className="text-base">
+      <TabsTrigger value="1" className="text-[#EE7500] text-base px-6 py-2">
+        Quarterly
+      </TabsTrigger>
+      <TabsTrigger value="2" className="text-[#EE7500] text-base px-6 py-2">
         Yearly
       </TabsTrigger>
     </TabsList>
