@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, CircleX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React from "react";
 import { cn } from "@/lib/utils";
@@ -16,6 +16,11 @@ import { Separator } from "@/components/ui/separator";
 
 type PricingSwitchProps = {
   onSwitch: (value: string) => void;
+};
+
+type Feature = {
+  text: string;
+  included: boolean;
 };
 
 type PricingCardProps = {
@@ -28,7 +33,7 @@ type PricingCardProps = {
   quarterlySavePercent?: number;
   yearlySavePercent?: number;
   description: string;
-  features: string[];
+  features: Feature[];
   actionLabel: string;
   popular?: boolean;
 };
@@ -186,8 +191,12 @@ export const PricingCard = ({
 
         <CardContent className="flex flex-col gap-2 px-8 space-y-3">
           <p className="font-medium text-base">Top Features</p>
-          {features.map((feature: string) => (
-            <CheckItem key={feature} text={feature} />
+          {features.map((feature, index) => (
+            <CheckItem
+              key={index}
+              text={feature.text}
+              included={feature.included}
+            />
           ))}
         </CardContent>
       </div>
@@ -195,9 +204,13 @@ export const PricingCard = ({
   );
 };
 
-const CheckItem = ({ text }: { text: string }) => (
+const CheckItem = ({ text, included }: { text: string; included: boolean }) => (
   <div className="flex gap-2">
-    <CheckCircle2 size={18} className="my-auto text-green-400" />
+    {included ? (
+      <CheckCircle2 size={20} className="my-auto text-[#00DF76]" />
+    ) : (
+      <CircleX size={20} className="my-auto text-[#d62828bf]" />
+    )}
     <p className="pt-0.5 font-medium text-primary-light text-sm">{text}</p>
   </div>
 );
