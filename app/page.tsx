@@ -1,17 +1,33 @@
 "use client";
-
+import { useState } from "react";
 import { PricingCard, PricingSwitch } from "@/components/pricing";
-import React, { useState } from "react";
 
 export default function Home() {
-  const [isYearly, setIsYearly] = useState(false);
-  const togglePricingPeriod = (value: string) =>
-    setIsYearly(parseInt(value) === 1);
+  const [pricingPeriod, setPricingPeriod] = useState<
+    "monthly" | "quarterly" | "yearly"
+  >("monthly");
+
+  const togglePricingPeriod = (value: string) => {
+    switch (value) {
+      case "0":
+        setPricingPeriod("monthly");
+        break;
+      case "1":
+        setPricingPeriod("quarterly");
+        break;
+      case "2":
+        setPricingPeriod("yearly");
+        break;
+      default:
+        setPricingPeriod("monthly");
+    }
+  };
 
   const plans = [
     {
-      title: "Basic",
-      monthlyPrice: 10,
+      title: "G-Basic",
+      monthlyPrice: 6,
+      quarterlyPrice: 15,
       yearlyPrice: 100,
       description: "Essential features you need to get started",
       features: [
@@ -22,10 +38,11 @@ export default function Home() {
       actionLabel: "Get Started",
     },
     {
-      title: "Pro",
-      monthlyPrice: 25,
+      title: "G-Premium",
+      monthlyPrice: 9,
+      quarterlyPrice: 25,
       yearlyPrice: 250,
-      description: "Perfect for owners of small & medium businessess",
+      description: "Perfect for owners of small & medium businesses",
       features: [
         "Example Feature Number 1",
         "Example Feature Number 2",
@@ -35,8 +52,10 @@ export default function Home() {
       popular: true,
     },
     {
-      title: "Enterprise",
-      price: "Custom",
+      title: "G-Advance",
+      monthlyPrice: 11,
+      quarterlyPrice: 30,
+      yearlyPrice: 350,
       description: "Dedicated support and infrastructure to fit your needs",
       features: [
         "Example Feature Number 1",
@@ -48,6 +67,7 @@ export default function Home() {
       exclusive: true,
     },
   ];
+
   return (
     <>
       <div className="bg-pricing-hero w-full h-[22.313rem] flex justify-center items-center">
@@ -68,7 +88,11 @@ export default function Home() {
         <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-8">
           {plans.map((plan) => {
             return (
-              <PricingCard key={plan.title} {...plan} isYearly={isYearly} />
+              <PricingCard
+                key={plan.title}
+                {...plan}
+                pricingPeriod={pricingPeriod}
+              />
             );
           })}
         </section>
