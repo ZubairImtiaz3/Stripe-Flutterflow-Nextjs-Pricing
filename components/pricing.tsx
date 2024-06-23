@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -25,11 +24,13 @@ type PricingCardProps = {
   monthlyPrice?: number;
   quarterlyPrice?: number;
   yearlyPrice?: number;
+  monthlySavePercent?: number;
+  quarterlySavePercent?: number;
+  yearlySavePercent?: number;
   description: string;
   features: string[];
   actionLabel: string;
   popular?: boolean;
-  exclusive?: boolean;
 };
 
 export const PricingSwitch = ({ onSwitch }: PricingSwitchProps) => (
@@ -54,22 +55,32 @@ export const PricingCard = ({
   monthlyPrice,
   quarterlyPrice,
   yearlyPrice,
+  monthlySavePercent,
+  quarterlySavePercent,
+  yearlySavePercent,
   description,
   features,
   actionLabel,
   popular,
-  exclusive,
 }: PricingCardProps) => {
   const getPrice = () => {
+    let price;
     switch (pricingPeriod) {
       case "yearly":
-        return yearlyPrice ? `USD ${yearlyPrice}` : "Custom";
+        price = yearlyPrice ? yearlyPrice : "Custom";
+        break;
       case "quarterly":
-        return quarterlyPrice ? `USD ${quarterlyPrice}` : "Custom";
+        price = quarterlyPrice ? quarterlyPrice : "Custom";
+        break;
       case "monthly":
       default:
-        return monthlyPrice ? `USD ${monthlyPrice}` : "Custom";
+        price = monthlyPrice ? monthlyPrice : "Custom";
+        break;
     }
+    return {
+      currency: "USD",
+      amount: price,
+    };
   };
 
   const getPeriod = () => {
@@ -84,71 +95,109 @@ export const PricingCard = ({
     }
   };
 
+  const getSavePercent = () => {
+    switch (pricingPeriod) {
+      case "yearly":
+        return yearlySavePercent;
+      case "quarterly":
+        return quarterlySavePercent;
+      case "monthly":
+      default:
+        return monthlySavePercent;
+    }
+  };
+
+  const calculateOriginalPrice = () => {
+    const savePercent = getSavePercent() ?? 0;
+    const price = getPrice().amount;
+
+    if (savePercent === 0) return price;
+    const discount = (price as number) * (savePercent / 100);
+    return (price as number) - discount;
+  };
+
   return (
     <Card
       className={cn(
-        `w-72 flex flex-col justify-between py-1 ${
-          popular ? "border-rose-400" : "border-zinc-700"
-        } mx-auto sm:mx-0`,
-        {
-          "animate-background-shine bg-white dark:bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] transition-colors":
-            exclusive,
-        }
+        `w-[23.125rem] flex flex-col justify-between py-1 ${
+          popular ? "border-rose-400" : "border-[rgba(0, 31, 115, 0.1)]"
+        } mx-auto sm:mx-0`
       )}
     >
       <div>
-        <CardHeader className="pb-8 pt-4">
-          <div className="flex justify-between">
-            <CardTitle className="text-zinc-700 dark:text-zinc-300 text-lg">
+        <CardHeader className="space-y-6 pb-7 pt-4 px-8">
+          <div>
+            <CardTitle className="text-[#000] text-xl font-semibold">
               {title}
             </CardTitle>
-            {pricingPeriod === "yearly" && yearlyPrice && monthlyPrice && (
-              <div
-                className={cn(
-                  "px-2.5 rounded-xl h-fit text-sm py-1 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white",
-                  {
-                    "bg-gradient-to-r from-orange-400 to-rose-400 dark:text-black ":
-                      popular,
-                  }
+            <CardDescription className="pt-2.5 text-sm text-primary-light">
+              {description}
+            </CardDescription>
+          </div>
+
+          {(pricingPeriod === "yearly" || pricingPeriod === "quarterly") &&
+            yearlyPrice &&
+            quarterlyPrice && (
+              <div className="flex items-center space-x-2">
+                {getSavePercent() && (
+                  <span className="text-sm text-primary-light line-through">
+                    {getPrice().currency} {getPrice().amount}
+                  </span>
                 )}
-              >
-                Save ${monthlyPrice * 12 - yearlyPrice}
+                <div
+                  className={cn(
+                    "w-max px-2.5 rounded-[0.938rem] h-fit text-sm py-1 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white",
+                    {
+                      "bg-gradient-to-r from-orange-400 to-rose-400 dark:text-black ":
+                        popular,
+                    }
+                  )}
+                >
+                  Save {getSavePercent()}%
+                </div>
               </div>
             )}
-          </div>
-          <CardDescription className="pt-1.5 h-12">
-            {description}
-          </CardDescription>
-          <div className="flex gap-0.5">
-            <h3 className="text-3xl font-bold">{getPrice()}</h3>
-            <span className="flex flex-col justify-end text-sm mb-1">
+
+          <div className="flex items-center">
+            <span className="text-base text-primary-light">
+              {getPrice().currency}
+            </span>
+            <span className="font-semibold text-[2.125rem] text-[#FF6600] relative bottom-2 ml-1">
+              {calculateOriginalPrice()}
+            </span>
+            <span className="flex flex-col justify-end text-base text-primary-light mb-1">
               {getPeriod()}
             </span>
           </div>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-2">
-          <Button className="relative inline-flex w-full items-center justify-center rounded-md bg-black text-white dark:bg-white px-6 font-medium  dark:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-            <div className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
+
+          <Button
+            variant="outline"
+            className={`text-[#FF6600] hover:bg-secondary hover:text-white px-6 font-medium border-secondary border-2 ${
+              popular ? "bg-secondary text-white" : ""
+            }`}
+          >
             {actionLabel}
           </Button>
-          <CardDescription className="pt-1.5 h-12">
+          <CardDescription className="text-sm text-primary-light pb-2">
             Try free for 3 days
           </CardDescription>
-          <Separator />
+          <Separator className="bg-gray-300 mt-2" />
+        </CardHeader>
+
+        <CardContent className="flex flex-col gap-2 px-8 space-y-3">
+          <p className="font-medium text-base">Top Features</p>
           {features.map((feature: string) => (
             <CheckItem key={feature} text={feature} />
           ))}
         </CardContent>
       </div>
-      <CardFooter className="mt-2"></CardFooter>
     </Card>
   );
 };
 
-
 const CheckItem = ({ text }: { text: string }) => (
   <div className="flex gap-2">
     <CheckCircle2 size={18} className="my-auto text-green-400" />
-    <p className="pt-0.5 text-zinc-700 dark:text-zinc-300 text-sm">{text}</p>
+    <p className="pt-0.5 font-medium text-primary-light text-sm">{text}</p>
   </div>
 );
