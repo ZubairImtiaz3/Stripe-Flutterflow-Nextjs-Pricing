@@ -136,85 +136,96 @@ export const PricingCard = ({
   };
 
   return (
-    <Card
-      className={cn(
-        `w-[23.125rem] flex flex-col justify-between py-1 ${
-          popular ? "border-rose-400" : "border-[rgba(0, 31, 115, 0.1)]"
-        } mx-auto sm:mx-0`
-      )}
-    >
-      <div>
-        <CardHeader className="space-y-6 pb-7 pt-4 px-8">
-          <div>
-            <CardTitle className="text-[#000] text-xl font-semibold">
-              {title}
-            </CardTitle>
-            <CardDescription className="pt-2.5 text-sm text-primary-light">
-              {description}
-            </CardDescription>
-          </div>
+    <>
+      <Card
+        className={cn(
+          `relative max-w-[23.125rem] flex flex-col justify-between py-1 ${
+            popular
+              ? "border-[#EE7500] border-2 rounded-b-lg"
+              : "border-[rgba(0, 31, 115, 0.1)] rounded-lg"
+          } mx-auto sm:mx-0`
+        )}
+      >
+        <div>
+          {popular && (
+            <div className="absolute font-semibold text-sm text-white [background:var(--gradient)] text-center py-3 rounded-t-lg w-[23.15rem] top-[-2.5rem] right-[-2px]">
+              Most Popular
+            </div>
+          )}
 
-          {(pricingPeriod === "yearly" || pricingPeriod === "quarterly") &&
-            yearlyPrice &&
-            quarterlyPrice && (
-              <div className="flex items-center space-x-2">
-                {getSavePercent() && (
-                  <span className="text-sm text-primary-light line-through">
-                    {getPrice().currency} {getPrice().amount}
-                  </span>
-                )}
-                <div
-                  className={cn(
-                    "w-max px-2.5 rounded-[0.938rem] h-fit text-sm py-1 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white",
-                    {
-                      "bg-gradient-to-r from-orange-400 to-rose-400 dark:text-black ":
-                        popular,
-                    }
+          <CardHeader className="space-y-6 pb-7 pt-4 px-8">
+            <div>
+              <CardTitle className="text-[#000] text-xl font-semibold">
+                {title}
+              </CardTitle>
+              <CardDescription className="pt-2.5 text-sm text-primary-light">
+                {description}
+              </CardDescription>
+            </div>
+
+            {(pricingPeriod === "yearly" || pricingPeriod === "quarterly") &&
+              yearlyPrice &&
+              quarterlyPrice && (
+                <div className="flex items-center space-x-2">
+                  {getSavePercent() && (
+                    <span className="text-sm text-primary-light line-through">
+                      {getPrice().currency}
+                      {getPrice().amount}
+                    </span>
                   )}
-                >
-                  Save {getSavePercent()}%
+                  <div
+                    className={cn(
+                      "w-max px-2.5 rounded-[0.938rem] h-fit text-sm py-1 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white",
+                      {
+                        "bg-gradient-to-r from-orange-400 to-rose-400 dark:text-black ":
+                          popular,
+                      }
+                    )}
+                  >
+                    Save {getSavePercent()}%
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-          <div className="flex items-center">
-            <span className="text-base text-primary-light">
-              {getPrice().currency}
-            </span>
-            <span className="font-semibold text-[2.125rem] text-[#FF6600] relative bottom-2 ml-1">
-              {calculateOriginalPrice()}
-            </span>
-            <span className="flex flex-col justify-end text-base text-primary-light mb-1">
-              {getPeriod()}
-            </span>
-          </div>
+            <div className="flex items-center">
+              <span className="text-base text-primary-light">
+                {getPrice().currency}
+              </span>
+              <span className="font-semibold text-[2.125rem] text-[#FF6600] relative bottom-2 ml-1">
+                {calculateOriginalPrice()}
+              </span>
+              <span className="flex flex-col justify-end text-base text-primary-light mb-1">
+                {getPeriod()}
+              </span>
+            </div>
 
-          <Button
-            variant="outline"
-            className={`text-[#FF6600] hover:bg-secondary hover:text-white px-6 font-medium border-secondary border-2 ${
-              popular ? "bg-secondary text-white" : ""
-            }`}
-          >
-            {actionLabel}
-          </Button>
-          <CardDescription className="text-sm text-primary-light pb-2">
-            Try free for 3 days
-          </CardDescription>
-          <Separator className="bg-gray-300 mt-2" />
-        </CardHeader>
+            <Button
+              variant="outline"
+              className={`text-[#FF6600] hover:bg-secondary hover:text-white px-6 font-medium border-secondary border-2 ${
+                popular ? "bg-secondary text-white" : ""
+              }`}
+            >
+              {actionLabel}
+            </Button>
+            <CardDescription className="text-sm text-primary-light pb-2">
+              Try free for 3 days
+            </CardDescription>
+            <Separator className="bg-gray-300 mt-2" />
+          </CardHeader>
 
-        <CardContent className="flex flex-col gap-2 px-8 space-y-3">
-          <p className="font-medium text-base">Top Features</p>
-          {features.map((feature, index) => (
-            <CheckItem
-              key={index}
-              text={feature.text}
-              included={getFeatureInclusion(feature)}
-            />
-          ))}
-        </CardContent>
-      </div>
-    </Card>
+          <CardContent className="flex flex-col gap-2 px-8 space-y-3">
+            <p className="font-medium text-base">Top Features</p>
+            {features.map((feature, index) => (
+              <CheckItem
+                key={index}
+                text={feature.text}
+                included={getFeatureInclusion(feature)}
+              />
+            ))}
+          </CardContent>
+        </div>
+      </Card>
+    </>
   );
 };
 

@@ -40,7 +40,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="py-8">
+      <div className="py-14">
         <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-8">
           {plans.map((plan) => {
             return (
