@@ -20,7 +20,9 @@ type PricingSwitchProps = {
 
 type Feature = {
   text: string;
-  included: boolean;
+  includedMonthly: boolean;
+  includedQuarterly: boolean;
+  includedYearly: boolean;
 };
 
 type PricingCardProps = {
@@ -121,6 +123,18 @@ export const PricingCard = ({
     return (price as number) - discount;
   };
 
+  const getFeatureInclusion = (feature: Feature) => {
+    switch (pricingPeriod) {
+      case "yearly":
+        return feature.includedYearly;
+      case "quarterly":
+        return feature.includedQuarterly;
+      case "monthly":
+      default:
+        return feature.includedMonthly;
+    }
+  };
+
   return (
     <Card
       className={cn(
@@ -195,7 +209,7 @@ export const PricingCard = ({
             <CheckItem
               key={index}
               text={feature.text}
-              included={feature.included}
+              included={getFeatureInclusion(feature)}
             />
           ))}
         </CardContent>

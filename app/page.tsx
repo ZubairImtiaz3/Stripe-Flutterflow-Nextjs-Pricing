@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { PricingCard, PricingSwitch } from "@/components/pricing";
+import { plans } from "@/constant/data";
 
 export default function Home() {
   const [pricingPeriod, setPricingPeriod] = useState<
@@ -22,61 +23,6 @@ export default function Home() {
         setPricingPeriod("monthly");
     }
   };
-
-  const plans = [
-    {
-      title: "G-Basic",
-      monthlyPrice: 6,
-      quarterlyPrice: 18,
-      yearlyPrice: 72,
-      monthlySavePercent: 0,
-      quarterlySavePercent: 5,
-      yearlySavePercent: 15,
-      description: "Upgrade today for amazing exclusive offers.",
-      features: [
-        { text: "Example Feature Number 1", included: true },
-        { text: "Example Feature Number 2", included: true },
-        { text: "Example Feature Number 3", included: false },
-        { text: "Super Exclusive Feature", included: true },
-      ],
-      actionLabel: "Choose Plan",
-    },
-    {
-      title: "G-Premium",
-      monthlyPrice: 9,
-      quarterlyPrice: 27,
-      yearlyPrice: 108,
-      monthlySavePercent: 0,
-      quarterlySavePercent: 5,
-      yearlySavePercent: 15,
-      description: "Upgrade today for amazing exclusive offers.",
-      features: [
-        { text: "Example Feature Number 1", included: true },
-        { text: "Example Feature Number 2", included: true },
-        { text: "Example Feature Number 3", included: false },
-        { text: "Super Exclusive Feature", included: true },
-      ],
-      actionLabel: "Choose Plan",
-      popular: true,
-    },
-    {
-      title: "G-Advance",
-      monthlyPrice: 11,
-      quarterlyPrice: 33,
-      yearlyPrice: 132,
-      monthlySavePercent: 0,
-      quarterlySavePercent: 5,
-      yearlySavePercent: 15,
-      description: "Upgrade today for amazing exclusive offers.",
-      features: [
-        { text: "Example Feature Number 1", included: true },
-        { text: "Example Feature Number 2", included: true },
-        { text: "Example Feature Number 3", included: false },
-        { text: "Super Exclusive Feature", included: true },
-      ],
-      actionLabel: "Choose Plan",
-    },
-  ];
 
   return (
     <>
