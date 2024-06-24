@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { PricingCard, PricingSwitch } from "@/components/pricing";
 import { plans } from "@/constant/data";
+import { CurrencyDropDown } from "@/components/currencyDropdown";
 
 export default function Home() {
   const [pricingPeriod, setPricingPeriod] = useState<
@@ -36,7 +37,10 @@ export default function Home() {
             We offer three comprehensive packages to cater to your needs:
             <br /> Basic, Premium, and Supported/Partners.
           </p>
-          <PricingSwitch onSwitch={togglePricingPeriod} />
+          <div className="flex justify-center space-x-8 items-end">
+            <CurrencyDropDown />
+            <PricingSwitch onSwitch={togglePricingPeriod} />
+          </div>
         </div>
       </div>
 
