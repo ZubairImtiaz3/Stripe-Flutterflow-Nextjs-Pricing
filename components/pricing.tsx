@@ -38,6 +38,8 @@ type PricingCardProps = {
   features: Feature[];
   actionLabel: string;
   popular?: boolean;
+  conversionRates: { [key: string]: number };
+  selectedCurrency: string;
 };
 
 export const PricingSwitch = ({ onSwitch }: PricingSwitchProps) => (
@@ -69,24 +71,33 @@ export const PricingCard = ({
   features,
   actionLabel,
   popular,
+  conversionRates,
+  selectedCurrency,
 }: PricingCardProps) => {
   const getPrice = () => {
     let price;
     switch (pricingPeriod) {
       case "yearly":
-        price = yearlyPrice ? yearlyPrice : "Custom";
+        price = yearlyPrice || 0;
         break;
       case "quarterly":
-        price = quarterlyPrice ? quarterlyPrice : "Custom";
+        price = quarterlyPrice || 0;
         break;
       case "monthly":
       default:
-        price = monthlyPrice ? monthlyPrice : "Custom";
+        price = monthlyPrice || 0;
         break;
     }
+
+    const selectedCurrencyUppercase = selectedCurrency.toUpperCase();
+    const conversionRate = conversionRates[selectedCurrencyUppercase];
+
+    const formattedAmount = (
+      conversionRate ? price * conversionRate : price
+    ).toLocaleString(undefined, { maximumFractionDigits: 0 });
     return {
-      currency: "USD",
-      amount: price,
+      currency: selectedCurrencyUppercase,
+      amount: formattedAmount,
     };
   };
 
@@ -116,11 +127,18 @@ export const PricingCard = ({
 
   const calculateOriginalPrice = () => {
     const savePercent = getSavePercent() ?? 0;
-    const price = getPrice().amount;
+    const formattedPrice = getPrice().amount;
 
-    if (savePercent === 0) return price;
-    const discount = (price as number) * (savePercent / 100);
-    return (price as number) - discount;
+    if (savePercent === 0) return formattedPrice;
+
+    const price = parseFloat(formattedPrice.replace(/,/g, ""));
+    const discount = price * (savePercent / 100);
+    const discountedPrice = price - discount;
+    const formattedDiscountedPrice = discountedPrice.toLocaleString(undefined, {
+      maximumFractionDigits: 0,
+    });
+
+    return formattedDiscountedPrice;
   };
 
   const getFeatureInclusion = (feature: Feature) => {

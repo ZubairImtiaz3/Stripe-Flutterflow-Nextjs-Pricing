@@ -1,13 +1,22 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PricingCard, PricingSwitch } from "@/components/pricing";
 import { plans } from "@/constant/data";
 import { CurrencyDropDown } from "@/components/currencyDropdown";
+import axios from "axios";
 
 export default function Home() {
   const [pricingPeriod, setPricingPeriod] = useState<
     "monthly" | "quarterly" | "yearly"
   >("monthly");
+  const [selectedCurrency, setSelectedCurrency] = useState("usd");
+  const [conversionRates, setConversionRates] = useState<{
+    [key: string]: number;
+  }>({});
+
+  const handleCurrencyChange = (value: string) => {
+    setSelectedCurrency(value);
+  };
 
   const togglePricingPeriod = (value: string) => {
     switch (value) {
@@ -25,6 +34,25 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    if (
+      selectedCurrency !== "usd" &&
+      Object.keys(conversionRates).length === 0
+    ) {
+      axios
+        .get(
+          `https://v6.exchangerate-api.com/v6/${process.env.NEXT_PUBLIC_EXCHANGE_KEY}/latest/USD`
+        )
+        .then((response: any) => {
+          setConversionRates(response.data.conversion_rates);
+          console.log("Fetched Exchange Rate");
+        })
+        .catch((error: Error) => {
+          console.error("Error fetching conversion rates", error);
+        });
+    }
+  }, [selectedCurrency, conversionRates]);
+
   return (
     <>
       <div className="bg-pricing-hero w-full h-[22.313rem] flex justify-center items-center">
@@ -38,7 +66,7 @@ export default function Home() {
             <br /> Basic, Premium, and Supported/Partners.
           </p>
           <div className="flex justify-center space-x-8 items-end">
-            <CurrencyDropDown />
+            <CurrencyDropDown onValueChange={handleCurrencyChange} />
             <PricingSwitch onSwitch={togglePricingPeriod} />
           </div>
         </div>
@@ -52,6 +80,8 @@ export default function Home() {
                 key={plan.title}
                 {...plan}
                 pricingPeriod={pricingPeriod}
+                conversionRates={conversionRates}
+                selectedCurrency={selectedCurrency}
               />
             );
           })}

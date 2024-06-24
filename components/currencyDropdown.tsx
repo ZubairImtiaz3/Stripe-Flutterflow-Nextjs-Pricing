@@ -8,10 +8,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "./ui/separator";
+interface CurrencyDropDownProps {
+  onValueChange: (value: string) => void;
+}
 
-export function CurrencyDropDown() {
+export function CurrencyDropDown({ onValueChange }: CurrencyDropDownProps) {
   return (
-    <Select defaultValue="usd">
+    <Select defaultValue="usd" onValueChange={onValueChange}>
       <SelectTrigger className="w-[150px] h-[57.6px] bg-muted text-[#EE7500] focus:ring-[#EE7500] focus:ring-offset-1">
         <SelectValue />
       </SelectTrigger>
