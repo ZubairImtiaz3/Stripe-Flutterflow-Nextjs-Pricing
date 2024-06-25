@@ -1,18 +1,14 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PricingCard, PricingSwitch } from "@/components/pricing";
 import { plans } from "@/constant/data";
 import { CurrencyDropDown } from "@/components/currencyDropdown";
-import axios from "axios";
 
 export default function Home() {
   const [pricingPeriod, setPricingPeriod] = useState<
     "monthly" | "quarterly" | "yearly"
   >("monthly");
   const [selectedCurrency, setSelectedCurrency] = useState("usd");
-  const [conversionRates, setConversionRates] = useState<{
-    [key: string]: number;
-  }>({});
 
   const handleCurrencyChange = (value: string) => {
     setSelectedCurrency(value);
@@ -33,25 +29,6 @@ export default function Home() {
         setPricingPeriod("monthly");
     }
   };
-
-  useEffect(() => {
-    if (
-      selectedCurrency !== "usd" &&
-      Object.keys(conversionRates).length === 0
-    ) {
-      axios
-        .get(
-          `https://v6.exchangerate-api.com/v6/${process.env.NEXT_PUBLIC_EXCHANGE_KEY}/latest/USD`
-        )
-        .then((response: any) => {
-          setConversionRates(response.data.conversion_rates);
-          console.log("Fetched Exchange Rate");
-        })
-        .catch((error: Error) => {
-          console.error("Error fetching conversion rates", error);
-        });
-    }
-  }, [selectedCurrency, conversionRates]);
 
   return (
     <>
@@ -80,7 +57,6 @@ export default function Home() {
                 key={plan.title}
                 {...plan}
                 pricingPeriod={pricingPeriod}
-                conversionRates={conversionRates}
                 selectedCurrency={selectedCurrency}
               />
             );

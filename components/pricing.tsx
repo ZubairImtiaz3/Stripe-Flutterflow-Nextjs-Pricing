@@ -31,6 +31,9 @@ type PricingCardProps = {
   monthlyPrice?: number;
   quarterlyPrice?: number;
   yearlyPrice?: number;
+  yearlyPriceNgn?: number;
+  quarterlyPriceNgn?: number;
+  monthlyPriceNgn?: number;
   monthlySavePercent?: number;
   quarterlySavePercent?: number;
   yearlySavePercent?: number;
@@ -38,7 +41,6 @@ type PricingCardProps = {
   features: Feature[];
   actionLabel: string;
   popular?: boolean;
-  conversionRates: { [key: string]: number };
   selectedCurrency: string;
 };
 
@@ -73,6 +75,9 @@ export const PricingCard = ({
   monthlyPrice,
   quarterlyPrice,
   yearlyPrice,
+  yearlyPriceNgn,
+  quarterlyPriceNgn,
+  monthlyPriceNgn,
   monthlySavePercent,
   quarterlySavePercent,
   yearlySavePercent,
@@ -80,33 +85,31 @@ export const PricingCard = ({
   features,
   actionLabel,
   popular,
-  conversionRates,
   selectedCurrency,
 }: PricingCardProps) => {
   const getPrice = () => {
     let price;
     switch (pricingPeriod) {
       case "yearly":
-        price = yearlyPrice || 0;
+        price = selectedCurrency === "ngn" ? yearlyPriceNgn : yearlyPrice || 0;
         break;
       case "quarterly":
-        price = quarterlyPrice || 0;
+        price =
+          selectedCurrency === "ngn" ? quarterlyPriceNgn : quarterlyPrice || 0;
         break;
       case "monthly":
       default:
-        price = monthlyPrice || 0;
+        price =
+          selectedCurrency === "ngn" ? monthlyPriceNgn : monthlyPrice || 0;
         break;
     }
 
-    const selectedCurrencyUppercase = selectedCurrency.toUpperCase();
-    const conversionRate = conversionRates[selectedCurrencyUppercase];
-
-    const formattedAmount = (
-      conversionRate ? price * conversionRate : price
-    ).toLocaleString(undefined, { maximumFractionDigits: 0 });
     return {
-      currency: selectedCurrencyUppercase,
-      amount: formattedAmount,
+      currency: selectedCurrency.toUpperCase(),
+      amount: price
+        ?.toLocaleString("en-US", { maximumFractionDigits: 0 })
+        .replace(/,/g, ", "),
+      amountForDiscount: price,
     };
   };
 
@@ -136,18 +139,27 @@ export const PricingCard = ({
 
   const calculateOriginalPrice = () => {
     const savePercent = getSavePercent() ?? 0;
-    const formattedPrice = getPrice().amount;
+    const price = getPrice().amountForDiscount;
 
-    if (savePercent === 0) return formattedPrice;
+    if (savePercent === 0)
+      return Math.round(price as number)
+        .toLocaleString("en-US", {
+          maximumFractionDigits: 0,
+        })
+        .replace(/,/g, ", ");
 
-    const price = parseFloat(formattedPrice.replace(/,/g, ""));
-    const discount = price * (savePercent / 100);
-    const discountedPrice = price - discount;
-    const formattedDiscountedPrice = discountedPrice.toLocaleString(undefined, {
-      maximumFractionDigits: 0,
-    });
+    const discount = (price as number) * (savePercent / 100);
+    const discountedPrice = (price as number) - discount;
 
-    return formattedDiscountedPrice;
+    if (discountedPrice === 25.65 || discountedPrice === 31.35) {
+      return discountedPrice;
+    }
+
+    return Math.round(discountedPrice)
+      ?.toLocaleString("en-US", {
+        maximumFractionDigits: 0,
+      })
+      .replace(/,/g, ", ");
   };
 
   const getFeatureInclusion = (feature: Feature) => {
