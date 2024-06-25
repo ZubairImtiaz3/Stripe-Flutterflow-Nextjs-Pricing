@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import PaymentComponent from "@/components/PaymentComponent";
 
 type PricingSwitchProps = {
   onSwitch: (value: string) => void;
@@ -141,25 +142,34 @@ export const PricingCard = ({
     const savePercent = getSavePercent() ?? 0;
     const price = getPrice().amountForDiscount;
 
-    if (savePercent === 0)
-      return Math.round(price as number)
-        .toLocaleString("en-US", {
-          maximumFractionDigits: 0,
-        })
+    const formatPrice = (price: number) =>
+      Math.round(price)
+        .toLocaleString("en-US", { maximumFractionDigits: 0 })
         .replace(/,/g, ", ");
+
+    if (savePercent === 0) {
+      const roundedPrice = Math.round(price as number);
+      return {
+        withCommas: formatPrice(roundedPrice),
+        withoutCommas: roundedPrice,
+      };
+    }
 
     const discount = (price as number) * (savePercent / 100);
     const discountedPrice = (price as number) - discount;
 
     if (discountedPrice === 25.65 || discountedPrice === 31.35) {
-      return discountedPrice;
+      return {
+        withCommas: discountedPrice,
+        withoutCommas: discountedPrice,
+      };
     }
 
-    return Math.round(discountedPrice)
-      ?.toLocaleString("en-US", {
-        maximumFractionDigits: 0,
-      })
-      .replace(/,/g, ", ");
+    const roundedDiscountedPrice = Math.round(discountedPrice);
+    return {
+      withCommas: formatPrice(roundedDiscountedPrice),
+      withoutCommas: roundedDiscountedPrice,
+    };
   };
 
   const getFeatureInclusion = (feature: Feature) => {
@@ -230,21 +240,20 @@ export const PricingCard = ({
                 {getPrice().currency}
               </span>
               <span className="font-semibold text-[2.125rem] text-[#FF6600] relative bottom-2 ml-1">
-                {calculateOriginalPrice()}
+                {calculateOriginalPrice().withCommas}
               </span>
               <span className="flex flex-col justify-end text-base text-primary-light mb-1">
                 {getPeriod()}
               </span>
             </div>
-
-            <Button
-              variant="outline"
-              className={`text-[#FF6600] hover:bg-secondary hover:text-white px-6 font-medium border-secondary border-2 ${
+            <PaymentComponent
+              amount={calculateOriginalPrice().withoutCommas}
+              currency={getPrice().currency}
+              title={actionLabel}
+              cssStyle={`text-[#FF6600] hover:bg-secondary hover:text-white px-6 font-medium border-secondary border-2 ${
                 popular ? "bg-secondary text-white" : ""
               }`}
-            >
-              {actionLabel}
-            </Button>
+            />
             <CardDescription className="text-sm text-primary-light pb-2">
               Try free for 3 days
             </CardDescription>
