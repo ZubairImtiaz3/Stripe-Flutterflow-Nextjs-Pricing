@@ -35,6 +35,8 @@
       --radius: 0.75rem;
 
       --gradient: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), #E55109;
+
+      --gradient-light: linear-gradient(0deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), #E55109;
     }
 
     .dark {

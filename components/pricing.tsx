@@ -45,13 +45,22 @@ type PricingCardProps = {
 export const PricingSwitch = ({ onSwitch }: PricingSwitchProps) => (
   <Tabs defaultValue="0" className="mx-auto pt-6" onValueChange={onSwitch}>
     <TabsList className="py-7 px-[1.125rem]">
-      <TabsTrigger value="0" className="text-[#EE7500] text-base px-6 py-2">
+      <TabsTrigger
+        value="0"
+        className="text-[#EE7500] text-sm sm:text-base px-6 py-2"
+      >
         Monthly
       </TabsTrigger>
-      <TabsTrigger value="1" className="text-[#EE7500] text-base px-6 py-2">
+      <TabsTrigger
+        value="1"
+        className="text-[#EE7500] text-sm sm:text-base px-6 py-2"
+      >
         Quarterly
       </TabsTrigger>
-      <TabsTrigger value="2" className="text-[#EE7500] text-base px-6 py-2">
+      <TabsTrigger
+        value="2"
+        className="text-[#EE7500] text-sm sm:text-base px-6 py-2"
+      >
         Yearly
       </TabsTrigger>
     </TabsList>
@@ -159,14 +168,14 @@ export const PricingCard = ({
         className={cn(
           `relative max-w-[23.125rem] flex flex-col justify-between py-1 ${
             popular
-              ? "border-[#EE7500] border-2 rounded-b-lg"
+              ? "border-[#EE7500] border-2 rounded-b-lg mt-10 lg:mt-0"
               : "border-[rgba(0, 31, 115, 0.1)] rounded-lg"
           } mx-auto sm:mx-0`
         )}
       >
         <div>
           {popular && (
-            <div className="absolute font-semibold text-sm text-white [background:var(--gradient)] text-center py-3 rounded-t-lg w-[23.15rem] top-[-2.5rem] right-[-2px]">
+            <div className="absolute font-semibold text-sm text-white [background:var(--gradient)] text-center py-3 rounded-t-lg sm:w-[23.15rem] w-[101%] top-[-2.5rem] right-[-2px]">
               Most Popular
             </div>
           )}
@@ -193,10 +202,9 @@ export const PricingCard = ({
                   )}
                   <div
                     className={cn(
-                      "w-max px-2.5 rounded-[0.938rem] h-fit text-sm py-1 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white",
+                      "w-max px-2.5 rounded-[0.938rem] h-fit text-sm py-1 font-semibold text-[#FF6600] [background:var(--gradient-light)]",
                       {
-                        "bg-gradient-to-r from-orange-400 to-rose-400 dark:text-black ":
-                          popular,
+                        popular,
                       }
                     )}
                   >
