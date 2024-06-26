@@ -13,7 +13,10 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import PaymentComponent from "@/components/PaymentComponent";
+import {
+  FlutterwareComponent,
+  StripeComponent,
+} from "@/components/PaymentComponent";
 
 type PricingSwitchProps = {
   onSwitch: (value: string) => void;
@@ -246,11 +249,20 @@ export const PricingCard = ({
                 {getPeriod()}
               </span>
             </div>
-            <PaymentComponent
+            <FlutterwareComponent
               amount={calculateOriginalPrice().withoutCommas}
               currency={getPrice().currency}
               title={actionLabel}
               cssStyle={`text-[#FF6600] hover:bg-secondary hover:text-white px-6 font-medium border-secondary border-2 ${
+                popular ? "bg-secondary text-white" : ""
+              }`}
+            />
+
+            <StripeComponent
+              amount={calculateOriginalPrice().withoutCommas}
+              currency={getPrice().currency}
+              title={actionLabel}
+              cssStyle={`text-[#FF6600] bg-background hover:bg-secondary hover:text-white px-6 font-medium border-secondary border-2 ${
                 popular ? "bg-secondary text-white" : ""
               }`}
             />
