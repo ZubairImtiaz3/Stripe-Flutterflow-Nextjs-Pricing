@@ -249,23 +249,25 @@ export const PricingCard = ({
                 {getPeriod()}
               </span>
             </div>
-            <FlutterwareComponent
-              amount={calculateOriginalPrice().withoutCommas}
-              currency={getPrice().currency}
-              title={actionLabel}
-              cssStyle={`text-[#FF6600] hover:bg-secondary hover:text-white px-6 font-medium border-secondary border-2 ${
-                popular ? "bg-secondary text-white" : ""
-              }`}
-            />
-
-            <StripeComponent
-              amount={calculateOriginalPrice().withoutCommas}
-              currency={getPrice().currency}
-              title={actionLabel}
-              cssStyle={`text-[#FF6600] bg-background hover:bg-secondary hover:text-white px-6 font-medium border-secondary border-2 ${
-                popular ? "bg-secondary text-white" : ""
-              }`}
-            />
+            {getPrice().currency === "USD" ? (
+              <StripeComponent
+                amount={calculateOriginalPrice().withoutCommas}
+                currency={getPrice().currency}
+                title={actionLabel}
+                cssStyle={`text-[#FF6600] bg-background hover:bg-secondary hover:text-white px-6 font-medium border-secondary border-2 ${
+                  popular ? "bg-secondary text-white" : ""
+                }`}
+              />
+            ) : (
+              <FlutterwareComponent
+                amount={calculateOriginalPrice().withoutCommas}
+                currency={getPrice().currency}
+                title={actionLabel}
+                cssStyle={`text-[#FF6600] hover:bg-secondary hover:text-white px-6 font-medium border-secondary border-2 ${
+                  popular ? "bg-secondary text-white" : ""
+                }`}
+              />
+            )}
             <CardDescription className="text-sm text-primary-light pb-2">
               Try free for 3 days
             </CardDescription>

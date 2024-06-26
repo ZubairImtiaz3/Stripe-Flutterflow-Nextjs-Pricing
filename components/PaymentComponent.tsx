@@ -87,7 +87,7 @@ const StripeComponent = ({ amount, currency, title, cssStyle }: any) => {
       className={cssStyle}
       disabled={loading}
     >
-      {loading ? "Processing..." : "Checkout"}
+      {loading ? "Processing..." : title}
     </Button>
   );
 };
