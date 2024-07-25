@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
 
-First, run the development server:
+<div align="center">
+<h1>Stripe Flutterflow Nextjs Pricing Component</h1>
 
+![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Stripe](https://img.shields.io/badge/stripe-%2338B2AC.svg?style=for-the-badge&logo=stripe&logoColor=white)
+![FLutterFlow](https://img.shields.io/badge/flutterflow-%234CAF50.svg?style=for-the-badge&logo=flutterflow&logoColor=white)
+</div>
+
+## Features
+
+- **Dynamic Pricing Cards**: Includes three pricing tiers—Basic, Popular, and Advance.
+- **Customizable Tabs**: Switch between monthly, weekly, and yearly pricing options.
+- **Currency Dropdown**: Toggle between USD and NGN currencies.
+- **Stripe Integration**: Handles payments in USD.
+- **FlutterFlow Integration**: Manages payments in NGN.
+- **Shadcn Components**: Utilizes Shadcn for a seamless and stylish UI.
+- **Fully Customizable**: Easily adjust pricing plans, currency options, and design elements.
+
+## Technologies
+
+- **Next.js**: A React framework for server-rendered and statically generated web applications.
+- **TypeScript**: For adding static type definitions.
+- **Shadcn UI**: A collection of components for building UI.
+- **Stripe**: Handles payments and transactions in USD.
+- **Flutterwave-react-v3**: Manages payments and currency conversion in NGN.
+
+## Installation
+
+### Clone & Run Locally:
+- Clone this repository.
+- Install Dependencies: <kbd>npm install</kbd>
+- Run <kbd>npm run dev</kbd> to start
+- You can access the the application at <kbd>http://localhost:3000</kbd>
+   
+### Import In Your Project:
+- Make sure you have initialized Shadcn UI in your project
+
+- Use your package manager to install the required dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install @stripe/stripe-js stripe flutterwave-react-v3
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Copy the following components into your project:
+```bash
+app/components/pricing.tsx
+app/components/PaymentComponent.tsx
+app/components/CurrencyDropdown.tsx
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+- Copy the page into your project:
+```bash
+app/page.tsx
+```
 
-To learn more about Next.js, take a look at the following resources:
+- Copy Route Handler in your project:
+```bash
+app/api/create-checkout-session
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Define your pricing data in a data.ts file. Here's an example of the data format:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+| Property            | Type         | Example Value                                  |
+|---------------------|--------------|-----------------------------------------------|
+| title             | string     | "G-Basic"                                    |
+| monthlyPrice      | number     | 60                                           |
+| quarterlyPrice    | number     | 18                                           |
+| yearlyPrice       | number     | 72                                           |
+| yearlyPriceNgn    | number     | 65294                                        |
+| quarterlyPriceNgn | number     | 15000                                        |
+| monthlyPriceNgn   | number     | 5000                                         |
+| monthlySavePercent| number     | 0                                            |
+| quarterlySavePercent| number   | 5                                            |
+| yearlySavePercent | number     | 15                                           |
+| description       | string     | "Upgrade today for amazing exclusive offers."|
+| features          | array      |  [{ text: "Infinite Chatting", includedMonthly: true, includedQuarterly: true, includedYearly: true }]                                                                         |
+| actionLabel       | string     | "Choose Plan"                                |
+| popular           | boolean    | true                                         |
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## How It Can Be Improved
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **Real-time Currency Updates**: Implement dynamic pricing changes based on real-time currency exchange rates by integrating a real-time currency API. This will ensure that pricing remains accurate and up-to-date across different currencies.
+
